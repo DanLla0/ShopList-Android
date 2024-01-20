@@ -11,7 +11,7 @@ import android.net.Uri;
 import com.danlla0.ShopList_Android.Objects.Contact;
 
 public class AlarmReceiver extends BroadcastReceiver {
-
+//MÉTDODO QUE SE EJECUTA CUANDO SE EJECUTA UNA ALARMA
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("ShareList.alarm")) {

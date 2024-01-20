@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
                                 //Trabajo en la interfaz de usuario aquí
                                 DB.updateTimesInLists();
                                 DB.getListHistory();
-
-
                             }
                         });
                     }
@@ -130,8 +128,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-
+    //MÉTODO PARA CARGAR LAS ALARMAS QUE TIENE ESTABLECIDAS LA APLICACIÓN
     public void loadAlarms() {
         SharedPreferences myPreferences = getSharedPreferences("alarms-preferences", MODE_PRIVATE);
         HashMap<String, String> alarms = (HashMap<String, String>) myPreferences.getAll();
@@ -149,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                     String message = values[4];
                     Alarm alarm = new Alarm(id, contact, hour, minute, message);
                     alarm.setAlarm(getApplicationContext(), false);
-                    Log.d(LOG_ID + 151, alarm.toString());
                 }
             }
             Log.d(LOG_ID + 151, "Alarmas cargadas correctamente");
@@ -169,12 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_settings) {
-            System.out.println("---------------------------SELECTED CONTACTS-------------------------");
-            ContactList.selectedContactList.forEach(contact -> System.out.println(contact.toString()));
-            System.out.println("------------------------------CONTACTS-------------------------------");
-            ContactList.contactList.forEach(contact -> System.out.println(contact.toString()));
-        }
         return super.onOptionsItemSelected(item);
     }
 
