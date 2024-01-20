@@ -18,7 +18,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="com.danlla0.ShopList_Android.Fragments.ShopListFragment"
+            android:name="com.danlla0.Practica4_DanielLlamas.Fragments.ShopListFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

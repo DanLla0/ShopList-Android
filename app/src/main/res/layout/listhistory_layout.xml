@@ -7,7 +7,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerListHistory"
-        android:name="com.danlla0.ShopList_Android.Fragments.ListHistoryFragment"
+        android:name="com.danlla0.Practica4_DanielLlamas.Fragments.ListHistoryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
