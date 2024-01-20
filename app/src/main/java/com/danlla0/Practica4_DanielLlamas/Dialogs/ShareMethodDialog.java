@@ -37,14 +37,15 @@ public class ShareMethodDialog extends DialogFragment {
     DialogInterface.OnClickListener positiveButtonListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-            enviarMensaje();
+            sendMessage();
             dialog.cancel();
         }
     };
 
-    private void enviarMensaje() {
-        //preguntar por el country code
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s&text=%s", "+34" + ContactList.selectedContactList.get(0).getTelephoneNumber(), selectedList.toMessage()))));
+    private void sendMessage() {
+        for (Contact c : ContactList.selectedContactList) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s&text=%s", c.getTelephoneNumber(), selectedList.toMessage()))));
+        }
 
     }
 
@@ -62,6 +63,11 @@ public class ShareMethodDialog extends DialogFragment {
                             newAlarm.setAlarm(context, true);
                         }
                         Toast.makeText(context, "El envío se ha programado correctamente.", Toast.LENGTH_SHORT).show();
+                        int position = 0;
+                        while(position < ContactList.selectedContactList.size()) {
+                            ContactList.contactList.get(position++).setSelected(false);
+                        }
+                        ContactList.myAdapter.notifyDataSetChanged();
                     }
                 }
             };
