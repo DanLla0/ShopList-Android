@@ -67,14 +67,14 @@ public class ShopList {
         // ld.product_amount - 3,
         // list_name - 4,
         // list_id - 5
-        Cursor c = DB.getDB.rawQuery("select p.product_id, p.product_name, p.product_price,ld.product_amount, l.list_name, l.list_id from Products p join ListDetails ld on p.product_id = ld.product_id join Lists l on ld.list_id = l.list_id where l.list_id = " + this.getId() + " order by p.product_id", null);
+        Cursor c = DB.getDB.rawQuery("select p.product_id as 'ID-PRODUCTO', p.product_name as 'NOMBRE-PRODUCTO', p.product_price as 'PRECIO',ld.product_amount as 'CANTIDAD', l.list_name, l.list_id from Products p join ListDetails ld on p.product_id = ld.product_id join Lists l on ld.list_id = l.list_id where l.list_id = " + this.getId() + " order by p.product_id", null);
         String msg = "La lista está vacía.", line = "----------------------------------------------------------------------------\n";
         if (c.getCount() != 0) {
             c.moveToFirst();
             msg = c.getString(5) + " - Lista: " + c.getString(4) + "\n";
             msg += line;
-            String format = "%-10s %-20s %-15s %-15s %10s %n";
-            msg += String.format(format, c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), "product_total_price");
+            String format = "%-12s %-20s %-15s %-15s %-10s %n";
+            msg += String.format(format, c.getColumnName(0), c.getColumnName(1), c.getColumnName(2), c.getColumnName(3), "TOTAL");
             Double total = 0.0d;
             do {
                 double totalProductPrice = 0.0d;
@@ -86,7 +86,7 @@ public class ShopList {
                     // al ser este caso de uso un caso imaginario hacemos este cálculo de ejemplo.
                     totalProductPrice = (Double.parseDouble(c.getString(2)) * Double.parseDouble(amount)) * 0.5;
                 }
-                msg += String.format("%-10s %-20s %-15s %-15s %.1f %n", c.getString(0), c.getString(1), c.getString(2), c.getString(3), totalProductPrice);
+                msg += String.format("%-12s %-20s %-15s %-15s %.1f %n", c.getString(0), c.getString(1), c.getString(2), c.getString(3), totalProductPrice);
                 total += totalProductPrice;
             } while (c.moveToNext());
             msg += line;

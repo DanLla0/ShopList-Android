@@ -43,8 +43,8 @@ public class ShareMethodDialog extends DialogFragment {
     };
 
     private void sendMessage() {
-        for (Contact c : ContactList.selectedContactList) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s&text=%s", c.getTelephoneNumber(), selectedList.toMessage()))));
+        for (Contact contact : ContactList.selectedContactList) {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s&text=%s", contact.getTelephoneNumber(), selectedList.toMessage()))));
         }
 
     }
@@ -59,6 +59,7 @@ public class ShareMethodDialog extends DialogFragment {
 
                         for (Contact contact : ContactList.selectedContactList) {
                             int id = context.getSharedPreferences("alarms-preferences", Context.MODE_PRIVATE).getAll().size() + 1;
+                            System.out.println(selectedList.toMessage());
                             Alarm newAlarm = new Alarm(id, contact, hourOfDay, minute, selectedList.toMessage());
                             newAlarm.setAlarm(context, true);
                         }
@@ -72,7 +73,7 @@ public class ShareMethodDialog extends DialogFragment {
                 }
             };
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, myTimeListener, 0, 0, true);
+            TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar, myTimeListener, 12, 30, true);
             timePickerDialog.setTitle("Elige la hora: ");
             timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             timePickerDialog.show();

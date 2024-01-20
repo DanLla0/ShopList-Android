@@ -57,8 +57,8 @@ public class MyListHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyLis
             @Override
             public void onClick(View v) {
                 ShopList list = mValues.get(holder.getAbsoluteAdapterPosition());
-                    list.setSelected(true);
-                    ShopListList.shopListArray.stream().filter(shoplist -> shoplist.getId() != list.getId()).forEach(shoplist -> shoplist.setSelected(false));
+                list.setSelected(true);
+                ShopListList.shopListArray.stream().filter(shoplist -> shoplist.getId() != list.getId()).forEach(shoplist -> shoplist.setSelected(false));
                 listName = mValues.get(holder.getAbsoluteAdapterPosition()).name;
                 try {
                     ShopListList.myAdapter.notifyDataSetChanged();
