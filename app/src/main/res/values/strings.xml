@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Listas de la compra</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_newList">Nueva Lista</string>
+    <string name="menu_checkLists">Consultar Listas</string>
+    <string name="menu_newProduct">Crear producto</string>
+    <string name="menu_shareList">Compartir lista</string>
+    <string name="text_ListName" tools:ignore="ExtraTranslation">Nombre de la Lista</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="listExistText">El nombre de la lista ya está en uso.</string>
+    <string name="emptyListText">El nombre de la lista no puede estar vacío.</string>
+    <string name="successListInsert">La lista ha sido creada correctamente.</string>
+    <string name="saveText">Guardar</string>
+    <string name="badAmountInput" tools:ignore="ExtraTranslation">El valor de las cantidades no es válido.</string>
+    <string name="allProductNull">No hay ningún producto seleccionado.</string>
+    <string name="emptySelectedContactList">No hay contactos seleccionados.</string>
+
+
+</resources>

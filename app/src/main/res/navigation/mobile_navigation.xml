@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_newList">
+
+    <fragment
+        android:id="@+id/nav_newList"
+        android:name="com.danlla0.ShopList_Android.Fragments.HomeFragment"
+        android:label="@string/menu_newList"
+        tools:layout="@layout/create_list_layout" >
+        <action
+            android:id="@+id/action_nav_newList_to_newListActivity"
+            app:destination="@id/newListActivity" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_newProduct"
+        android:name="com.danlla0.ShopList_Android.Fragments.NewProductFragment"
+        android:label="@string/menu_newProduct"
+        tools:layout="@layout/fragment_new_product" >
+        <action
+            android:id="@+id/action_nav_newProduct_to_nav_newList"
+            app:destination="@id/nav_newList" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_shareList"
+        android:name="com.danlla0.ShopList_Android.Fragments.ShareListFragment"
+        android:label="@string/menu_shareList"
+        tools:layout="@layout/fragment_share_list" />
+
+    <activity
+        android:id="@+id/newListActivity"
+        android:name="com.danlla0.ShopList_Android.NewListActivity"
+        android:label="activity_new_list"
+        tools:layout="@layout/activity_new_list" />
+</navigation>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/list"
+    android:name="com.danlla0.practica4_danielllamas.historyList.historyListFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/fab_margin"
+    android:layout_marginTop="4dp"
+    app:layoutManager="LinearLayoutManager"
+    tools:context=".Fragments.ListHistoryFragment"
+    tools:listitem="@layout/fragment_listhistory" />
