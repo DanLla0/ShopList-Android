@@ -95,8 +95,7 @@ public class NewProductFragment extends Fragment {
     }
 
 
-
-// LISTENER PARA AÑAIDIR EL PRODUCTO EN LA BASE DE DATOS
+    // LISTENER PARA AÑAIDIR EL PRODUCTO EN LA BASE DE DATOS
     View.OnClickListener listenerCreateProduct = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -136,8 +135,8 @@ public class NewProductFragment extends Fragment {
                                 initializeProductForm();
                                 try {
                                     ProductList.myAdapter.notifyDataSetChanged();
-                                }catch (Exception e){
-                                    Log.d(LOG_ID+"140", getString(R.string.null_adapter_text));
+                                } catch (Exception e) {
+                                    Log.d(LOG_ID + "140", getString(R.string.null_adapter_text));
                                 }
                             }
                         });
@@ -158,6 +157,7 @@ public class NewProductFragment extends Fragment {
             startActivityForResult(getCameraImageIntent, CAMERA_IMAGE_INTENT_CODE);
         }
     };
+
     //MÉTODO QUE SE EJECUTA CUANDO LA ACTIVIDAD / INTENT ACABA Y DONDE OPERAMOS CON LA IMAGEN HECHA
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -198,14 +198,14 @@ public class NewProductFragment extends Fragment {
         if (!binding.txtNewProductName.getText().toString().equals("") &&
                 !binding.txtNewProductDescription.getText().toString().equals("") &&
                 !binding.txtNewProductPrice.getText().toString().equals(""))
-        {
-            binding.btnCreateNewProduct.setEnabled(true);
-            binding.btnCreateNewProduct.setBackgroundResource(R.drawable.fade_orange_color);
+            setButtonSettings(true, R.drawable.fade_orange_color);
+        else
+            setButtonSettings(false, R.color.gray_400);
+    }
 
-        } else {
-            binding.btnCreateNewProduct.setEnabled(false);
-            binding.btnCreateNewProduct.setBackgroundResource(R.color.gray_400);
-        }
+    private void setButtonSettings(boolean enableMode, int style) {
+        binding.btnCreateNewProduct.setEnabled(enableMode);
+        binding.btnCreateNewProduct.setBackgroundResource(style);
     }
 
 
