@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.danlla0.Practica4_DanielLlamas"
+    namespace = "com.danlla0.ShopListApp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.danlla0.Practica4_DanielLlamas"
+        applicationId = "com.danlla0.ShopListApp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

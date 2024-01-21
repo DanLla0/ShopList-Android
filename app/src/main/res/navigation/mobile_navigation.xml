@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_newList"
-        android:name="com.danlla0.Practica4_DanielLlamas.Fragments.HomeFragment"
+        android:name="com.danlla0.ShopListApp.Fragments.HomeFragment"
         android:label="@string/menu_newList"
         tools:layout="@layout/create_list_layout" >
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/nav_newProduct"
-        android:name="com.danlla0.Practica4_DanielLlamas.Fragments.NewProductFragment"
+        android:name="com.danlla0.ShopListApp.Fragments.NewProductFragment"
         android:label="@string/menu_newProduct"
         tools:layout="@layout/fragment_new_product" >
         <action
@@ -26,13 +26,13 @@
     </fragment>
     <fragment
         android:id="@+id/nav_shareList"
-        android:name="com.danlla0.Practica4_DanielLlamas.Fragments.ShareListFragment"
+        android:name="com.danlla0.ShopListApp.Fragments.ShareListFragment"
         android:label="@string/menu_shareList"
         tools:layout="@layout/fragment_share_list" />
 
     <activity
         android:id="@+id/newListActivity"
-        android:name="com.danlla0.Practica4_DanielLlamas.NewListActivity"
+        android:name="com.danlla0.ShopListApp.NewListActivity"
         android:label="activity_new_list"
         tools:layout="@layout/activity_new_list" />
 </navigation>
