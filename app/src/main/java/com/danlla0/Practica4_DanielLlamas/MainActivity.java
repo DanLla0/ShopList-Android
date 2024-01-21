@@ -128,9 +128,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     //MÉTODO PARA CARGAR LAS ALARMAS QUE TIENE ESTABLECIDAS LA APLICACIÓN
     public void loadAlarms() {
         SharedPreferences myPreferences = getSharedPreferences("alarms-preferences", MODE_PRIVATE);
+        myPreferences.edit().clear().apply();
         HashMap<String, String> alarms = (HashMap<String, String>) myPreferences.getAll();
         if (alarms.size() > 0) {
             for (int i = 1; i <= alarms.size(); i++) {
@@ -138,14 +140,16 @@ public class MainActivity extends AppCompatActivity {
                 if (alarms.containsKey(alarmID)) {
                     String[] values = alarms.get(alarmID).toString().split(";");
                     ContactList.contactList.sort(Comparator.comparing(Contact::getId));
-                    int id = Integer.parseInt(values[0]);
                     int contactID = Integer.parseInt(values[1]);
                     Contact contact = ContactList.contactList.stream().filter(contactAux -> contactAux.getId() == contactID).findFirst().get();
-                    int hour = Integer.parseInt(values[2]);
-                    int minute = Integer.parseInt(values[3]);
-                    String message = values[4];
-                    Alarm alarm = new Alarm(id, contact, hour, minute, message);
-                    alarm.setAlarm(getApplicationContext(), false);
+                    if (contact != null) {
+                        int id = Integer.parseInt(values[0]);
+                        int hour = Integer.parseInt(values[2]);
+                        int minute = Integer.parseInt(values[3]);
+                        String message = values[4];
+                        Alarm alarm = new Alarm(id, contact, hour, minute, message);
+                        alarm.setAlarm(getApplicationContext(), false);
+                    }
                 }
             }
             Log.d(LOG_ID + 151, "Alarmas cargadas correctamente");

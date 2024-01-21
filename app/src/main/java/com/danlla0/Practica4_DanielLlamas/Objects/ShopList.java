@@ -67,7 +67,12 @@ public class ShopList {
         // ld.product_amount - 3,
         // list_name - 4,
         // list_id - 5
-        Cursor c = DB.getDB.rawQuery("select p.product_id as 'ID-PRODUCTO', p.product_name as 'NOMBRE-PRODUCTO', p.product_price as 'PRECIO',ld.product_amount as 'CANTIDAD', l.list_name, l.list_id from Products p join ListDetails ld on p.product_id = ld.product_id join Lists l on ld.list_id = l.list_id where l.list_id = " + this.getId() + " order by p.product_id", null);
+        Cursor c = DB.getDB.rawQuery("select p.product_id as 'ID-PRODUCTO', p.product_name as 'NOMBRE-PRODUCTO'," +
+                " p.product_price as 'PRECIO',ld.product_amount as 'CANTIDAD'," +
+                " l.list_name, l.list_id from Products p join ListDetails ld on p.product_id = ld.product_id " +
+                "join Lists l on ld.list_id = l.list_id " +
+                "where l.list_id = " + this.getId() + " " +
+                "order by p.product_id", null);
         String msg = "La lista está vacía.", line = "----------------------------------------------------------------------------\n";
         if (c.getCount() != 0) {
             c.moveToFirst();
