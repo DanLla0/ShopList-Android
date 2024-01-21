@@ -32,8 +32,6 @@ public class ListHistoryDialog extends DialogFragment implements MyListHistoryRe
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         ShopListList.myAdapter = new MyListHistoryRecyclerViewAdapter(ShopListList.shopListArray, this);
-
-
         View v = getLayoutInflater().inflate(R.layout.listhistory_layout, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Historial de Listas: ");
@@ -50,13 +48,14 @@ public class ListHistoryDialog extends DialogFragment implements MyListHistoryRe
         NewListActivityIntent.putExtra("list-name", listName);
         startActivity(NewListActivityIntent);
     }
+
     //MÉTODO QUE HACE UNA CONSULTA A LA BASE DE DATOS Y
     //CARGA LOS DATOS DE LA LISTA SELECCIONADA PARA CONSULTAR EN EL ARRAY DE OBJETOS
     public void getListDetails(String listName) {
         String query = "SELECT p.product_id, d.product_amount FROM Products p join ListDetails d on p.product_id = d.product_id where d.list_id in (select list_id from Lists where list_name = '" + listName + "') order by product_times_in_lists desc;";
         Cursor c = DB.getDB.rawQuery(query, null);
         if (c.getCount() == 0) {
-            Log.d(LOG_ID + " 56", "La lista no existe.");
+            Log.d(LOG_ID + " 58", "La lista no existe.");
         } else {
             //CARGAR LOS DATOS DE LA BASE DE DATOS
             while (c.moveToNext()) {
@@ -65,16 +64,15 @@ public class ListHistoryDialog extends DialogFragment implements MyListHistoryRe
                 try {
                     ProductList.myAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    Log.d(LOG_ID + "65", "Adaptador ProductList Nulo");
+                    Log.d(LOG_ID + "67", getString(R.string.null_adapter_text));
                 }
             }
-
-            Log.d(LOG_ID + " 69", "Cargado de Base de Datos");
+            Log.d(LOG_ID + "70", "Cargado de Base de Datos");
         }
         c.close();
 
     }
-
+    // LISTENER PARA EL BOTÓN "ACEPTAR"
     DialogInterface.OnClickListener positiveButtonListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -83,7 +81,7 @@ public class ListHistoryDialog extends DialogFragment implements MyListHistoryRe
             dialog.cancel();
         }
     };
-
+    //LISTENER PARA EL BOTÓN "CANCELAR"
     DialogInterface.OnClickListener negativeButtonListener = (dialog, which) -> dialog.cancel();
     //ESTA INTERFAZ ACTUALIZA EL NOMBRE DE LA LISTA QUE HEMOS SELECCIONADO EN EL ARRAY DE LAS LISTAS
     @Override

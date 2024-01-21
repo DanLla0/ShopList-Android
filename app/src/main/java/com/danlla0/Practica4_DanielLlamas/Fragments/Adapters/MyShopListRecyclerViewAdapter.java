@@ -42,7 +42,7 @@ public class MyShopListRecyclerViewAdapter extends RecyclerView.Adapter<MyShopLi
         holder.edAmont.setText(mValues.get(position).getAmount());
 
 
-        //LISTENER PARA EL EDITTEXT DE LA CANTIDAD, QUE ACTUALIZA LA CANTIDAD QUE ESTAMOS ESCRIBIENDO,
+        //LISTENER PARA EL CAMPO DE TEXTO DE LA CANTIDAD, QUE ACTUALIZA LA CANTIDAD QUE ESTAMOS ESCRIBIENDO,
         //EN EL PRODUCTO QUE ESTAMOS MODIFICANDO.
         holder.edAmont.addTextChangedListener(new TextWatcher() {
             @Override

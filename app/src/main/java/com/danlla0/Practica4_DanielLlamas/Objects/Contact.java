@@ -7,9 +7,9 @@ public class Contact implements Parcelable {
     public int id;
     public String name;
     public String telephoneNumber;
-    public  boolean isSelected;
+    public boolean isSelected;
 
-
+    //CONSTRUCTORES
     public Contact(String name, String telefoneNumber) {
 
         this.name = name;
@@ -24,6 +24,13 @@ public class Contact implements Parcelable {
 
     }
 
+    public Contact() {
+
+
+    }
+    // GETTERS / SETTERS
+
+
     public boolean isSelected() {
         return isSelected;
     }
@@ -31,12 +38,6 @@ public class Contact implements Parcelable {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
-
-    public Contact() {
-
-
-    }
-
 
     public int getId() {
         return id;
@@ -61,6 +62,9 @@ public class Contact implements Parcelable {
     public void setTelephoneNumber(String telephoneNumber) {
         this.telephoneNumber = telephoneNumber;
     }
+
+
+    //MÉTODOS PARCELABLE
 
     protected Contact(Parcel in) {
         name = in.readString();
@@ -90,6 +94,8 @@ public class Contact implements Parcelable {
             return new Contact[size];
         }
     };
+
+    //OTROS MÉTODOS
 
     @Override
     public String toString() {

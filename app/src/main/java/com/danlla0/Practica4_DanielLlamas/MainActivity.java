@@ -57,7 +57,7 @@ import java.util.concurrent.Executors;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PERMISO_CONTACTOS = 1;
+    private static final int CONTACT_PERMISSION = 1;
     private final String LOG_ID = "LOG - " + this.getClass().getSimpleName().toString() + " - ";
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -69,12 +69,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.appBarMain.toolbar);
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -83,20 +80,12 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_newList, R.id.nav_checkLists, R.id.nav_newProduct, R.id.nav_shareList)
                 .setOpenableLayout(drawer)
                 .build();
-
-
-        //STACK OVERFLOW SUPUESTA SOLUCIÓN DE JAVA OFICIAL
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host_fragment_content_main);
-
-        NavController navCo = navHostFragment.getNavController();
-        NavigationUI.setupActionBarWithNavController(this, navCo, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navCo);
-
-        //ANDROID STUDIO GENERATED CODE
-/*        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        NavController navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);*/
+        NavigationUI.setupWithNavController(navigationView, navController);
+
 
         //INICIAMOS LA APLICACIÓN UNA VEZ QUE HA CARGADO EL LAYOUT.
         DrawerLayout mainActivity_layout = findViewById(R.id.drawer_layout);
@@ -109,20 +98,18 @@ public class MainActivity extends AppCompatActivity {
                 executor.execute(new Runnable() {
                     @Override
                     public void run() {
-                        //Trabajo en Background aquí
                         createBD();
                         checkPermissions();
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                //Trabajo en la interfaz de usuario aquí
                                 DB.updateTimesInLists();
                                 DB.getListHistory();
                             }
                         });
                     }
                 });
-                //LISTENER QUE INVOCA EL DIALOGO CUANDO PULSAMOS CONSULTAR LISTAS
+                //LISTENER QUE INVOCA EL DIÁLOGO CUANDO PULSAMOS CONSULTAR LISTAS
                 findViewById(R.id.nav_checkLists).setOnClickListener(navCheckListListener);
             }
         });
@@ -132,14 +119,12 @@ public class MainActivity extends AppCompatActivity {
     //MÉTODO PARA CARGAR LAS ALARMAS QUE TIENE ESTABLECIDAS LA APLICACIÓN
     public void loadAlarms() {
         SharedPreferences myPreferences = getSharedPreferences("alarms-preferences", MODE_PRIVATE);
-        myPreferences.edit().clear().apply();
         HashMap<String, String> alarms = (HashMap<String, String>) myPreferences.getAll();
         if (alarms.size() > 0) {
             for (int i = 1; i <= alarms.size(); i++) {
                 String alarmID = "alarm" + i;
                 if (alarms.containsKey(alarmID)) {
                     String[] values = alarms.get(alarmID).toString().split(";");
-                    ContactList.contactList.sort(Comparator.comparing(Contact::getId));
                     int contactID = Integer.parseInt(values[1]);
                     Contact contact = ContactList.contactList.stream().filter(contactAux -> contactAux.getId() == contactID).findFirst().get();
                     if (contact != null) {
@@ -152,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            Log.d(LOG_ID + 151, "Alarmas cargadas correctamente");
+            Log.d(LOG_ID + 140, "Alarmas cargadas correctamente");
         }
     }
 
@@ -165,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-    //MÉTODO PARA PODER ACCEDER A LOS OBJETOS DEL MENÚ
+    //MÉTODO PARA PODER ACCEDER A LAS OPCIONES DEL MENÚ
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -214,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
             getJson();
         }
         c.close();
-
         DB.loadDemoData();
         DB.getDBData();
 
@@ -228,33 +212,30 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager conManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = conManager.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            //tenemos conexión a internet, podemos intentar traer la url
             try {
-                //Establecer la conexión
                 URL url = new URL("https://fp.cloud.riberadeltajo.es/listacompra/listaproductos.json");
-                HttpURLConnection conexion = (HttpURLConnection) url.openConnection();
-                conexion.setReadTimeout(10000); // Le damos un segundo para leer los datos-> aborta
-                conexion.setConnectTimeout(5000); //le damos un segundo para conectar
-                conexion.setRequestMethod("GET");
-                conexion.setDoInput(true);
-                conexion.connect();
-                //si llegamos aquí: Estamos conectados y listos para leer la respuesta
-                if (conexion.getResponseCode() == 200) {
-                    ArrayList<Product> product = getProducts(conexion.getInputStream());
-                    for (Product p : product) {
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(10000); // Le damos un segundo para leer los datos-> aborta
+                connection.setConnectTimeout(5000); //le damos un segundo para conectar
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                connection.connect();
+                if (connection.getResponseCode() == 200) {
+                    ArrayList<Product> products = getProducts(connection.getInputStream());
+                    for (Product product : products) {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        p.getImgProduct().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
+                        product.getImgProduct().compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteImage = stream.toByteArray();
                         String insertQuery = "INSERT INTO Products(product_name, product_description, product_image_name, product_image, product_price) VALUES('" +
-                                p.getName() + "', '" +       //name
-                                p.getDescription() + "', '" +//description
-                                p.getImgName() + "', " +      //image name
+                                product.getName() + "', '" +       //name
+                                product.getDescription() + "', '" +//description
+                                product.getImgName() + "', " +      //image name
                                 "?, " +                      //image
-                                p.getPrice() + ");";         //price
-                        DB.getDB.execSQL(insertQuery, new Object[]{byteArray});
+                                product.getPrice() + ");";         //price
+                        DB.getDB.execSQL(insertQuery, new Object[]{byteImage});
                     }
-                    Log.d(LOG_ID + "232", "Datos Cargados desde Json");
-                    conexion.getInputStream().close();
+                    Log.d(LOG_ID + "237", "Datos Cargados desde Json");
+                    connection.getInputStream().close();
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -265,8 +246,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    //MÉTODO QUE LANZA UN HILO ASINCRONO QUE CARGA LOS CONTACTOS EN EL ARRAY
-    private void getContacts(String text) {
+    //MÉTODO QUE LANZA UN HILO ASÍNCRONO QUE CARGA LOS CONTACTOS EN EL ARRAY DE LA LÓGICA
+    private void getContacts() {
         ContactList.contactList.clear();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -278,38 +259,35 @@ public class MainActivity extends AppCompatActivity {
                         ContactsContract.Contacts.DISPLAY_NAME,
                         ContactsContract.Contacts.HAS_PHONE_NUMBER};
                 String selection = ContactsContract.Contacts.DISPLAY_NAME + " like ?";
-                String selectionArgs[] = {"%" + text + "%"};
-                ContentResolver miCr = getContentResolver();
-                Cursor miCursor = miCr.query(ContactsContract.Contacts.CONTENT_URI, projection, selection, selectionArgs, null);
-                if (miCursor.getCount() > 0) {
-                    while (miCursor.moveToNext()) {
-                        String tlfNumberDefault = "-----------";
-                        String tlfNumber = tlfNumberDefault;
-                        if (miCursor.getString(2).equals("1")) {
-                            Cursor phones = miCr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone._ID + " = " + miCursor.getString(0), null, null);
-                            while (phones.moveToNext()) {
-                                tlfNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                ContentResolver contentResolver = getContentResolver();
+                Cursor contactCursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, projection, selection, null, null);
+                if (contactCursor.getCount() > 0) {
+                    while (contactCursor.moveToNext()) {
+                        String phoneNumber = "-----------";
+                        if (contactCursor.getString(2).equals("1")) {
+                            Cursor phonesCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone._ID + " = " + contactCursor.getString(0), null, null);
+                            while (phonesCursor.moveToNext()) {
+                                phoneNumber = phonesCursor.getString(phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                             }
-                            phones.close();
+                            phonesCursor.close();
                         }
-                        int id = Integer.parseInt(miCursor.getString(0));
-                        String name = miCursor.getString(1);
-                        ContactList.contactList.add(new Contact(id, name, tlfNumber));
+                        int id = Integer.parseInt(contactCursor.getString(0));
+                        String name = contactCursor.getString(1);
+                        ContactList.contactList.add(new Contact(id, name, phoneNumber));
                     }
                 }
-                miCursor.close();
+                contactCursor.close();
                 loadAlarms();
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        //Trabajo de la interfaz de usuario aquí
                         ContactList.contactList.sort(Comparator.comparing(Contact::getTelephoneNumber).reversed());
                         try {
                             ContactList.myAdapter.notifyDataSetChanged();
                         } catch (Exception e) {
-                            Log.d(LOG_ID + "286", "Adaptador ContactList Nulo");
+                            Log.d(LOG_ID + "288", getString(R.string.null_adapter_text));
                         }
-                        Log.d(LOG_ID + "288", "Contactos cargados correctamente.");
+                        Log.d(LOG_ID + "290", "Contactos cargados correctamente.");
                     }
                 });
             }
@@ -321,9 +299,9 @@ public class MainActivity extends AppCompatActivity {
     //MÉTODO QUE COMPRUEBA SI LA APLICACIÓN TIENE LOS PERMISOS PARA ACCEDER A LOS CONTACTOS
     public void checkPermissions() {
         if (checkSelfPermission("android.permission.READ_CONTACTS") != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{"android.permission.READ_CONTACTS"}, PERMISO_CONTACTOS);
+            requestPermissions(new String[]{"android.permission.READ_CONTACTS"}, CONTACT_PERMISSION);
         } else {
-            getContacts("");
+            getContacts();
         }
     }
 
@@ -331,9 +309,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISO_CONTACTOS) {
+        if (requestCode == CONTACT_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getContacts("");
+                getContacts();
             }
         }
     }
@@ -353,15 +331,15 @@ public class MainActivity extends AppCompatActivity {
             }
             String jsonString = bo.toString("UTF-8");
             JSONObject json = new JSONObject(jsonString);
-            JSONArray productosArray = json.getJSONArray("productos");
+            JSONArray productsArray = json.getJSONArray("productos");
 
-            for (int j = 0; j < productosArray.length(); j++) {
-                JSONObject productoJson = productosArray.getJSONObject(j);
+            for (int j = 0; j < productsArray.length(); j++) {
+                JSONObject jsonProduct = productsArray.getJSONObject(j);
 
-                String name = productoJson.getString("nombre");
-                String imgName = productoJson.getString("imagen");
-                String description = productoJson.getString("descripcion");
-                String price = productoJson.getString("precio");
+                String name = jsonProduct.getString("nombre");
+                String imgName = jsonProduct.getString("imagen");
+                String description = jsonProduct.getString("descripcion");
+                String price = jsonProduct.getString("precio");
                 Bitmap imgProduct = getImages(imgName);
 
                 Product product = new Product(id++, name, description, Double.parseDouble(price), imgName, imgProduct);
@@ -379,7 +357,6 @@ public class MainActivity extends AppCompatActivity {
     //MÉTODO PARA CONVERTIR LA IMAGEN QUE OBTENEMOS DE INTERNET A UN OBJETO BITMAP Y LA DEVUELVE
     private Bitmap getImages(String imgName) {
         Bitmap bitmap = null;
-
         try {
             URL imageUrl = new URL("https://fp.cloud.riberadeltajo.es/listacompra/images/" + imgName);
             HttpURLConnection connection = (HttpURLConnection) imageUrl.openConnection();
@@ -403,10 +380,9 @@ public class MainActivity extends AppCompatActivity {
 
         return bitmap;
 
-
     }
 
-    //LISTENER PARA EL BOTÓN DEL MENÚ DE NAVEGACIÓN QUE MUESTRA EL DIALOGO PARA CONSULTAR UNA LISTA
+    //LISTENER PARA EL BOTÓN DEL MENÚ DE NAVEGACIÓN QUE MUESTRA EL DIÁLOGO PARA CONSULTAR UNA LISTA
     View.OnClickListener navCheckListListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

@@ -11,7 +11,8 @@ import android.net.Uri;
 import com.danlla0.Practica4_DanielLlamas.Objects.Contact;
 
 public class AlarmReceiver extends BroadcastReceiver {
-//MÉTDODO QUE SE EJECUTA CUANDO SE EJECUTA UNA ALARMA
+//MÉTDODO QUE SE EJECUTA CUANDO SE EJECUTA UNA ALARMA, CREA EL INTENT DE ENVIAR POR WHATSAPP
+    // Y ELIMINA LA ALARMA QUE LO LLAMA DE LAS PREFERENCIAS DE LA APLICACIÓN
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("ShareList.alarm")) {

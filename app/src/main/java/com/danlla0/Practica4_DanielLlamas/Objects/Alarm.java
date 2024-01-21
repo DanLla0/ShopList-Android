@@ -20,6 +20,8 @@ public class Alarm {
     private Contact contact;
     private String message;
 
+    //CONSTRUCTORES
+
     public Alarm(int id, Contact contact, int hour, int minute, String message) {
         this.id = id;
         this.hour = hour;
@@ -35,16 +37,7 @@ public class Alarm {
         this.message = message;
     }
 
-    @Override
-    public String toString() {
-        return "Alarm{" +
-                "id= " + id +
-                ",hour=" + hour +
-                ", minute=" + minute +
-                ", contact=" + contact +
-                ", message='" + message + '\'' +
-                '}';
-    }
+//GETTERS / SETTERS
 
     public int getId() {
         return id;
@@ -86,8 +79,22 @@ public class Alarm {
         this.message = message;
     }
 
+    //OTROS MÉTODOS
+
+    @Override
+    public String toString() {
+        return "Alarm{" +
+                "id= " + id +
+                ",hour=" + hour +
+                ", minute=" + minute +
+                ", contact=" + contact +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
+
     public String toAlarmCode() {
-        // id, id-contacto, hora, minuto, mensaje / id-lista
+        // code like -> id, id-contacto, hora, minuto, mensaje / id-lista
         String alarmCodeAux = this.id + ";" +
                 this.contact.getId() + ";" +
                 this.hour + ";" +
@@ -97,12 +104,12 @@ public class Alarm {
     }
 
     public void setAlarm(Context context, boolean isNewAlarm) {
-        String alarmId = "alarm"+this.id;
-        if (isNewAlarm){
+        String alarmId = "alarm" + this.id;
+        if (isNewAlarm) {
             SharedPreferences myPreferences = context.getSharedPreferences("alarms-preferences", Context.MODE_PRIVATE);
             String alarmCode = this.toAlarmCode();
-            myPreferences.edit().putString(alarmId,alarmCode).apply();
-            Log.d(TAG,"AÑADIDO A PREFERENCES");
+            myPreferences.edit().putString(alarmId, alarmCode).apply();
+            Log.d("LOG - Alarm - 112", "Alarma añadida a la configuración.");
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -121,7 +128,6 @@ public class Alarm {
         PendingIntent alarmIntent = PendingIntent.getBroadcast(
                 context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
-        //alarma exacta
         alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
 
     }

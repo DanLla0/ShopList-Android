@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.danlla0.Practica4_DanielLlamas.Objects.ShopList;
 
+import com.danlla0.Practica4_DanielLlamas.R;
 import com.danlla0.Practica4_DanielLlamas.databinding.FragmentListhistoryBinding;
 import com.danlla0.Practica4_DanielLlamas.dto.ShopListList;
 
@@ -63,7 +64,7 @@ public class MyListHistoryRecyclerViewAdapter extends RecyclerView.Adapter<MyLis
                 try {
                     ShopListList.myAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    Log.d(LOG_ID+"63", "ShopListList adaptador nulo");
+                    Log.d(LOG_ID+"67", "Adaptador nulo");
                 }
                 onListSelection.selection(listName);
             }

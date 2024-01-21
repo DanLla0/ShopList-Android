@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.danlla0.Practica4_DanielLlamas.Objects.Contact;
+import com.danlla0.Practica4_DanielLlamas.R;
 import com.danlla0.Practica4_DanielLlamas.databinding.FragmentContactBinding;
 import com.danlla0.Practica4_DanielLlamas.dto.ContactList;
 
@@ -67,7 +68,7 @@ public class MyContactRecyclerViewAdapter extends RecyclerView.Adapter<MyContact
                 try {
                     ContactList.myAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
-                    Log.d(LOG_ID + "69", "Adaptador ContactList Nulo");
+                    Log.d(LOG_ID + "71", "Adaptador nulo");
                 }
             }
         };

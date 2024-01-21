@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.danlla0.Practica4_DanielLlamas.Objects.Alarm;
 import com.danlla0.Practica4_DanielLlamas.Objects.Contact;
 import com.danlla0.Practica4_DanielLlamas.Objects.ShopList;
 import com.danlla0.Practica4_DanielLlamas.dto.ContactList;
+import com.danlla0.Practica4_DanielLlamas.R;
 
 
 public class ShareMethodDialog extends DialogFragment {
@@ -33,7 +35,20 @@ public class ShareMethodDialog extends DialogFragment {
         this.selectedList = selectedList;
         this.context = context;
     }
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("¿Quieres compartir la lista ahora?");
+        builder.setNegativeButton("Programar envío", scheduleDate);
+        builder.setPositiveButton("Enviar ahora", positiveButtonListener);
+        return builder.create();
+    }
+
+
+
+    //LISTENER PARA "ENVIAR AHORA"
     DialogInterface.OnClickListener positiveButtonListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -41,7 +56,7 @@ public class ShareMethodDialog extends DialogFragment {
             dialog.cancel();
         }
     };
-
+    //INICIA EL INTENT DE ENVIAR LA LISTA POR WHATSAPP PARA CADA CONTACTO SELECCIONADO
     private void sendMessage() {
         for (Contact contact : ContactList.selectedContactList) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://api.whatsapp.com/send?phone=%s&text=%s", contact.getTelephoneNumber(), selectedList.toMessage()))));
@@ -49,6 +64,8 @@ public class ShareMethodDialog extends DialogFragment {
 
     }
 
+
+    //LISTENER PARA "PROGRAMAR ENVÍO"
     DialogInterface.OnClickListener scheduleDate = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -63,12 +80,9 @@ public class ShareMethodDialog extends DialogFragment {
                             Alarm newAlarm = new Alarm(id, contact, hourOfDay, minute, selectedList.toMessage());
                             newAlarm.setAlarm(context, true);
                         }
+
                         Toast.makeText(context, "El envío se ha programado correctamente.", Toast.LENGTH_SHORT).show();
-                        int position = 0;
-                        while(position < ContactList.selectedContactList.size()) {
-                            ContactList.contactList.get(position++).setSelected(false);
-                        }
-                        ContactList.myAdapter.notifyDataSetChanged();
+                        restartSelectedContacts();
                     }
                 }
             };
@@ -82,15 +96,17 @@ public class ShareMethodDialog extends DialogFragment {
     };
 
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("¿Quieres compartir la lista ahora?");
-        builder.setNegativeButton("Programar envío", scheduleDate);
-        builder.setPositiveButton("Enviar ahora", positiveButtonListener);
-        return builder.create();
+    //MÉTODO PARA DESELECCIONAR LOS CONTACTOS DE LA LISTA
+    private void restartSelectedContacts() {
+        int position = 0;
+        while(position < ContactList.selectedContactList.size()) {
+            ContactList.contactList.get(position++).setSelected(false);
+        }
+        try {
+            ContactList.myAdapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.d(LOG_ID + "108", getString(R.string.null_adapter_text));
+        }
     }
 
 

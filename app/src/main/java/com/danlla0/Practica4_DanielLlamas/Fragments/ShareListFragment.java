@@ -49,20 +49,6 @@ public class ShareListFragment extends Fragment {
         return root;
     }
 
-    //LISTENER QUE CREA LA ACTIVIDAD DE COMPARTIR LA LISTA POR WHATSAPP PARA CADA CONTACTO SELECCIONADO
-    View.OnClickListener btnShareListListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-           if(ContactList.selectedContactList.size()!=0){
-               selectedList = (ShopList) binding.listSpinner.getSelectedItem();
-               ShareMethodDialog shareMethodDialog = new ShareMethodDialog(selectedList,getActivity().getApplicationContext());
-               shareMethodDialog.show(getParentFragmentManager(),"Time picker dialog");
-           }else{
-               Toast.makeText(getContext(), R.string.emptySelectedContactList, Toast.LENGTH_SHORT).show();
-           }
-        }
-    };
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -73,6 +59,22 @@ public class ShareListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+
+    //LISTENER QUE CREA LA ACTIVIDAD DE COMPARTIR LA LISTA POR WHATSAPP PARA CADA CONTACTO SELECCIONADO
+    View.OnClickListener btnShareListListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(ContactList.selectedContactList.size()!=0){
+                selectedList = (ShopList) binding.listSpinner.getSelectedItem();
+                ShareMethodDialog shareMethodDialog = new ShareMethodDialog(selectedList,getActivity().getApplicationContext());
+                shareMethodDialog.show(getParentFragmentManager(),"alarm-time-pìcker-dialog");
+            }else{
+                Toast.makeText(getContext(), R.string.emptySelectedContactList, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
 
     public class myCustomAdapter extends ArrayAdapter<ShopList> {
         private ArrayList<ShopList> myLists;

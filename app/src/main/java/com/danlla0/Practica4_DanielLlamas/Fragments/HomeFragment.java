@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment {
         startActivity(NewListActivityIntent);
         binding.edListNameMain.setText("");
     }
+
     //LISTENER PARA EL BOTON DE CREAR LISTA, COMPRUEBA QUE EL NOMBRE DE LA LISTA NO EXISTA
     View.OnClickListener btnCreateListener = new View.OnClickListener() {
         @Override
@@ -59,7 +60,7 @@ public class HomeFragment extends Fragment {
         }
     };
 
-    //LISTENER PARA EL EDITTEXT DEL NOMBRE DE LA LISTA,
+    //LISTENER PARA EL CAMPO DE TEXTO DEL NOMBRE DE LA LISTA,
     //COMPRUEBA QUE EL NOMBRE DE LA LISTA / TEXTO QUE HEMOS INTRODUCIDO EN EL EDITTEXT
     //NO ESTE VACÍO Y ACTIVA EL BOTÓN
     TextWatcher edListNameMainListener = new TextWatcher() {
@@ -75,17 +76,16 @@ public class HomeFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (s.toString().length() > 0) {
-                binding.btnCreate.setEnabled(true);
-                binding.btnCreate.setBackgroundResource(R.drawable.fade_orange_color);
-            } else {
-                binding.btnCreate.setEnabled(false);
-                binding.btnCreate.setBackgroundResource(R.color.gray_400);
-            }
-            ;
-
-
+            if (s.toString().length() > 0)
+                setButtonSettings(true, R.drawable.fade_orange_color);
+            else
+                setButtonSettings(false, R.color.gray_400);
         }
     };
+
+    private void setButtonSettings(boolean enableMode, int style) {
+        binding.btnCreate.setEnabled(enableMode);
+        binding.btnCreate.setBackgroundResource(style);
+    }
 
 }

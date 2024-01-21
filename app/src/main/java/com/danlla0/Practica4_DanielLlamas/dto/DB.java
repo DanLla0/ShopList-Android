@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.danlla0.Practica4_DanielLlamas.Objects.ShopList;
 import com.danlla0.Practica4_DanielLlamas.Objects.Product;
+import com.danlla0.Practica4_DanielLlamas.R;
 
 import java.util.Comparator;
 
@@ -54,7 +55,6 @@ public class DB {
         DB.getDB.execSQL("insert into ListDetails values (3,5,10);");
         DB.getDB.execSQL("insert into ListDetails values (3,6,1);");
 
-        //Trabajo en la interfaz de usuario aquí
         Log.d(LOG_ID + "58", "Carga de datos de prueba completa");
 
     }
@@ -84,7 +84,7 @@ public class DB {
         try {
             ProductList.myAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            Log.d(LOG_ID + "87", "Adaptador ProductList Nulo");
+            Log.d(LOG_ID + "87", "Adaptador nulo");
         }
         c3.close();
         Log.d(LOG_ID + "90", "Actualización columna veces que salen los objetos en las listas completa");
@@ -105,7 +105,7 @@ public class DB {
         try {
             ShopListList.myAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            Log.d(LOG_ID + "108", "Adaptador ShopListList Nulo");
+            Log.d(LOG_ID + "108", "Adaptador Nulo");
         }
         c.close();
     }
@@ -128,9 +128,9 @@ public class DB {
             ProductList.productList.clear();
             Cursor c = DB.getDB.rawQuery("SELECT * FROM Products order by product_times_in_lists desc", null);
             while (c.moveToNext()) {
-                byte[] imagenBytes = c.getBlob(5);  // Obtener la imagen como bytes
-                Bitmap imagenBitmap = BitmapFactory.decodeByteArray(imagenBytes, 0, imagenBytes.length);
-                ProductList.productList.add(new Product(c.getInt(0), c.getString(1), c.getString(2), c.getDouble(3), c.getString(4), imagenBitmap));
+                byte[] imageBytes = c.getBlob(5);
+                Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                ProductList.productList.add(new Product(c.getInt(0), c.getString(1), c.getString(2), c.getDouble(3), c.getString(4), imageBitmap));
             }
             Log.d(LOG_ID + "135", "Cargado de Base de Datos");
             c.close();

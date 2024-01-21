@@ -10,13 +10,6 @@ public class ShopList {
     public String date;
     public boolean selected;
 
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
 
     public ShopList(String name, String date) {
         this.name = name;
@@ -29,6 +22,16 @@ public class ShopList {
         this.date = date;
         this.selected = false;
     }
+
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
 
     public int getId() {
         return id;
@@ -73,7 +76,8 @@ public class ShopList {
                 "join Lists l on ld.list_id = l.list_id " +
                 "where l.list_id = " + this.getId() + " " +
                 "order by p.product_id", null);
-        String msg = "La lista está vacía.", line = "----------------------------------------------------------------------------\n";
+        String msg = "La lista está vacía.",
+                line = "----------------------------------------------------------------------------\n";
         if (c.getCount() != 0) {
             c.moveToFirst();
             msg = c.getString(5) + " - Lista: " + c.getString(4) + "\n";
@@ -88,7 +92,7 @@ public class ShopList {
                 else {
                     String amount = c.getString(3).replaceAll("[^0-9]", "");
                     // Este cálculo es impreciso, se tendría que hacer una comparación con la relación precio / cantidad del objeto,
-                    // al ser este caso de uso un caso imaginario hacemos este cálculo de ejemplo.
+                    // al ser este caso de uso imaginario hacemos este cálculo de ejemplo.
                     totalProductPrice = (Double.parseDouble(c.getString(2)) * Double.parseDouble(amount)) * 0.5;
                 }
                 msg += String.format("%-12s %-20s %-15s %-15s %.1f %n", c.getString(0), c.getString(1), c.getString(2), c.getString(3), totalProductPrice);

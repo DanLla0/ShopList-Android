@@ -55,7 +55,7 @@ public class NewProductFragment extends Fragment {
     }
 
     //MÉTODO QUE INICIALIZA LOS CAMPOS DE LA VENTANA
-    public void newProduct() {
+    public void initializeProductForm() {
         binding.txtNewProductName.setText("");
         binding.txtNewProductDescription.setText("");
         binding.txtNewProductPrice.setText("");
@@ -63,11 +63,11 @@ public class NewProductFragment extends Fragment {
     }
 
 
-    //MÉTODO PARA TRANSFORMAR UNA CADENA EN UNA CADENA
-    // CON LA PRIMERA LETRA MAYÚSCULA UNICAMENTE
+    //MÉTODO PARA TRANSFORMAR UNA CADENA A UNA
+    // CON LA PRIMERA LETRA MAYÚSCULA ÚNICAMENTE
     public String capitalizeFirstChar(String word) {
         if (word.length() > 1)
-            return word.toLowerCase().substring(0, 1).toUpperCase() + word.toLowerCase().substring(1);
+            return (word.toLowerCase().substring(0, 1).toUpperCase() + word.toLowerCase().substring(1));
         else
             return word.toUpperCase();
     }
@@ -96,7 +96,7 @@ public class NewProductFragment extends Fragment {
 
 
 
-
+// LISTENER PARA AÑAIDIR EL PRODUCTO EN LA BASE DE DATOS
     View.OnClickListener listenerCreateProduct = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -105,13 +105,12 @@ public class NewProductFragment extends Fragment {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
-                    //Trabajo en Background aquí
                     Looper.prepare();
                     if (!productExists()) {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         if (productImage != null)
                             productImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
+                        byte[] byteImage = stream.toByteArray();
                         String name = capitalizeFirstChar(binding.txtNewProductName.getText().toString()),
                                 description = capitalizeFirstChar(binding.txtNewProductDescription.getText().toString());
                         double price = Double.parseDouble(binding.txtNewProductPrice.getText().toString());
@@ -127,25 +126,23 @@ public class NewProductFragment extends Fragment {
                                 price + ", '" +     //price
                                 getImgName(name, id) + "', " + // image_name
                                 "?);";            //image
-                        DB.getDB.execSQL(insertQuery, new Object[]{byteArray});
+                        DB.getDB.execSQL(insertQuery, new Object[]{byteImage});
 
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
-                                //Trabajo en la interfaz de usuario aquí
                                 Toast.makeText(getContext(), "Producto creado correctamente", Toast.LENGTH_LONG).show();
                                 ProductList.productList.add(new Product(id, name, description, price, productImage));
-                                newProduct();
+                                initializeProductForm();
                                 try {
-
                                     ProductList.myAdapter.notifyDataSetChanged();
                                 }catch (Exception e){
-                                    Log.d(LOG_ID+"155", "Adaptador ProductList Nulo");
+                                    Log.d(LOG_ID+"140", getString(R.string.null_adapter_text));
                                 }
                             }
                         });
                     } else {
-                        Toast.makeText(getContext(), "El producto ya existe.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.product_exists_text, Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -162,7 +159,6 @@ public class NewProductFragment extends Fragment {
         }
     };
     //MÉTODO QUE SE EJECUTA CUANDO LA ACTIVIDAD / INTENT ACABA Y DONDE OPERAMOS CON LA IMAGEN HECHA
-    //LISTENER DEL BOTÓN CREAR LISTA QUE REALIZA LA INSERCIÓN DE LOS  DATOS DEL PRODUCTO EN UN HILO ASINCRONOZ
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -171,13 +167,13 @@ public class NewProductFragment extends Fragment {
                 productImage = (Bitmap) data.getExtras().get("data");
                 binding.imgNewProduct.setImageBitmap(productImage);
             } catch (Exception e) {
-                Log.d(LOG_ID + "106", "Los datos extras del intent son nulos.");
+                Log.d(LOG_ID + "170", "No se ha hecho foto al objeto.");
             }
         }
     }
 
     //LISTENER QUE COMPRUEBA CADA VEZ QUE DAMOS UN INPUT DE TEXTO EN UN OBJETO
-    //Y ACTIVA EL BOTÓN DE CREAR SI LOS CAMPOS ESTÁN VACÍOS
+    //Y ACTIVA EL BOTÓN DE CREAR SI LOS CAMPOS NO ESTÁN VACÍOS
     TextWatcher listenerInputText = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -191,20 +187,26 @@ public class NewProductFragment extends Fragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (!binding.txtNewProductName.getText().toString().equals("") &&
-                    !binding.txtNewProductDescription.getText().toString().equals("") &&
-                    !binding.txtNewProductPrice.getText().toString().equals(""))
-            {
-                binding.btnCreateNewProduct.setEnabled(true);
-                binding.btnCreateNewProduct.setBackgroundResource(R.drawable.fade_orange_color);
-
-            } else {
-                binding.btnCreateNewProduct.setEnabled(false);
-                binding.btnCreateNewProduct.setBackgroundResource(R.color.gray_400);
-            }
+            buttonEnableChecker();
 
         }
     };
+
+
+    // SI TODOS LOS CAMPOS DE TEXTO ESTÁN VACÍOS EL BOTÓN ESTÁ DESACTIVADO
+    private void buttonEnableChecker() {
+        if (!binding.txtNewProductName.getText().toString().equals("") &&
+                !binding.txtNewProductDescription.getText().toString().equals("") &&
+                !binding.txtNewProductPrice.getText().toString().equals(""))
+        {
+            binding.btnCreateNewProduct.setEnabled(true);
+            binding.btnCreateNewProduct.setBackgroundResource(R.drawable.fade_orange_color);
+
+        } else {
+            binding.btnCreateNewProduct.setEnabled(false);
+            binding.btnCreateNewProduct.setBackgroundResource(R.color.gray_400);
+        }
+    }
 
 
     @Override

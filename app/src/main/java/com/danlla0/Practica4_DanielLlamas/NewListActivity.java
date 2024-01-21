@@ -50,15 +50,13 @@ public class NewListActivity extends AppCompatActivity {
 
 
 
-    //MÉTODO QUE ACTUALIZA / INSERTA LA LISTA QUE HEMOS CREADO / MODIFICADO, EN LA BASE DE DATOS
+    //MÉTODO QUE INSERTA / ACTUALIZA LA LISTA QUE HEMOS CREADO / MODIFICADO, EN LA BASE DE DATOS
     private void insertQuery() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                //Trabajo en Background aquí
-
                 Cursor c = DB.getDB.rawQuery("Select * from Lists where list_id = " + listId + ";", null);
                 String query = "";
 
@@ -71,11 +69,9 @@ public class NewListActivity extends AppCompatActivity {
                 c.close();
                 DB.getDB.execSQL(query);
                 insertDetails();
-
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        //Trabajo en la interfaz de usuario aquí
                         Toast.makeText(getApplicationContext(), R.string.successListInsert, Toast.LENGTH_LONG).show();
                     }
                 });
@@ -91,7 +87,6 @@ public class NewListActivity extends AppCompatActivity {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                //Trabajo en Background aquí
                 String listId = DB.getListId(listName);
                 DB.getDB.execSQL("delete from ListDetails where list_id = " + listId + ";");
                 for (Product p : ProductList.productList) {
@@ -99,19 +94,16 @@ public class NewListActivity extends AppCompatActivity {
                         if (!p.getAmount().equals("")) {
                             //INSERTAR LOS DATOS DE LOS DETALLES DE LA COMPRA
                             DB.getDB.execSQL("insert into ListDetails values(?,?,'" + p.getAmount() + "');", new Object[]{listId, p.getId()});
-
                         }
                     }
                 }
                 DB.updateTimesInLists();
                 DB.getListHistory();
-
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        //Trabajo en la interfaz de usuario aquí
-                        Log.d(LOG_ID + " 113", "Datos actualizados correctamente.");
-                        newList();
+                        Log.d(LOG_ID + " 105", "Datos actualizados correctamente.");
+                        initializeList();
                     }
                 });
             }
@@ -119,7 +111,7 @@ public class NewListActivity extends AppCompatActivity {
 
     }
 
-//MÉTODO QUE COMPRUEBA EL EDITTEXT DEL NOMBRE DE LA LISTA, NO ESTÉ VACIO
+//MÉTODO QUE COMPRUEBA QUE EL CAMPO DE TEXTO DEL NOMBRE DE LA LISTA NO ESTÉ VACÍO
     public boolean emptyName() {
         if (edName.getText().toString().equals(""))
             return true;
@@ -128,15 +120,15 @@ public class NewListActivity extends AppCompatActivity {
 
     }
 
-    //MÉTODO QUE INICIALIZA EL EDITTEXT DEL NOMBRE JUNTO CON LAS CANTIDADES DE LOS PRODUCTOS
-    public void newList() {
+    //MÉTODO QUE INICIALIZA EL CAMPO DE TEXTO DEL NOMBRE JUNTO CON LAS CANTIDADES DE LOS PRODUCTOS
+    public void initializeList() {
         try {
             edName.setText("");
-            Log.d(LOG_ID+ "135", "Valores de los productos cambiados");
+            Log.d(LOG_ID+ "127", "Valores de los productos cambiados");
             ProductList.productList.forEach(x -> x.setAmount(null));
             ProductList.myAdapter.notifyDataSetChanged();
         } catch (Exception e) {
-            Log.d(LOG_ID + "139", "Adaptador ProductList Nulo");
+            Log.d(LOG_ID + "131", getString(R.string.null_adapter_text));
         }
     }
 
@@ -181,7 +173,7 @@ public class NewListActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.emptyListText, Toast.LENGTH_SHORT).show();
                     break;
                 default:
-                    Log.d(LOG_ID + "184", "Código de error sin contemplar");
+                    Log.d(LOG_ID + "176", "Código de acción sin contemplar");
             }
         }
     };

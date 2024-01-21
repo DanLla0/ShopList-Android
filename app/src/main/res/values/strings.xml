@@ -20,6 +20,8 @@
     <string name="badAmountInput" tools:ignore="ExtraTranslation">El valor de las cantidades no es válido.</string>
     <string name="allProductNull">No hay ningún producto seleccionado.</string>
     <string name="emptySelectedContactList">No hay contactos seleccionados.</string>
+    <string name="product_exists_text">El producto ya existe.</string>
+    <string name="null_adapter_text">Adaptador nulo</string>
 
 
 </resources>

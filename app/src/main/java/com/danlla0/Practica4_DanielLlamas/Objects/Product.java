@@ -14,6 +14,42 @@ public class Product {
     private Bitmap imgProduct;
 
 
+    //CONSTRUCTORES
+
+    public Product(int id, String name, String description, double price, String imgName, Bitmap imgProduct) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imgName = imgName;
+        this.imgProduct = imgProduct;
+    }
+
+    public Product(int id, String name, String description, double price, int times_in_lists, String imgName, Bitmap imgProduct) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imgName = imgName;
+        this.imgProduct = imgProduct;
+    }
+
+    public Product(int id, String name, String description, double price, Bitmap imgProduct) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.imgName = imgName;
+        this.imgProduct = imgProduct;
+    }
+
+    public Product() {
+
+    }
+
+
+    //GETTERS / SETTERS
+
     public String getAmount() {
         return amount;
     }
@@ -80,32 +116,9 @@ public class Product {
         this.times_in_lists = times_in_lists;
     }
 
-    public Product(int id, String name, String description, double price, String imgName, Bitmap imgProduct) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imgName = imgName;
-        this.imgProduct = imgProduct;
-    }
-    public Product(int id, String name, String description, double price, int times_in_lists, String imgName, Bitmap imgProduct) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imgName = imgName;
-        this.imgProduct = imgProduct;
-    }
 
-    public Product(int id, String name, String description, double price, Bitmap imgProduct) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imgName = imgName;
-        this.imgProduct = imgProduct;
-    }
 
+    // OTROS MÉTODOS
     @Override
     public String toString() {
         return "Product{" +
@@ -120,7 +133,5 @@ public class Product {
                 '}';
     }
 
-    public Product() {
 
-    }
 }
