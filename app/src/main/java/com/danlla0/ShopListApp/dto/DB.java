@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.danlla0.ShopListApp.Objects.ShopList;
 import com.danlla0.ShopListApp.Objects.Product;
-import com.danlla0.ShopListApp.R;
 
 import java.util.Comparator;
 
@@ -22,8 +21,13 @@ public class DB {
     public static boolean listExist(String listName) {
         Cursor c = DB.getDB.rawQuery("select * from Lists where list_name = '" + listName + "';", null);
         if (c.getCount() != 0) {
+            c.close();
             return true;
-        } else return false;
+        } else {
+            c.close();
+            return false;
+        }
+
     }
 
 
@@ -66,7 +70,7 @@ public class DB {
         c.moveToFirst();
         int items = c.getCount();
         for (int i = items; i > 0; i--) {
-            String id = i + "";
+            String id = String.valueOf(i);
             Cursor c2 = DB.getDB.rawQuery("select count(*) from ListDetails d where d.product_id = ?", new String[]{id});
             c2.moveToFirst();
             int times_in_lists = c2.getInt(0);
@@ -77,10 +81,10 @@ public class DB {
         c.close();
         //UNA VEZ ACTUALIZADAS LAS COLUMNAS, PEDIMOS A LA BASE DE DATOS LA INFORMACIÓN Y LA PASAMOS A LOS PRODUCTOS
         Cursor c3 = DB.getDB.rawQuery("select product_id, product_times_in_lists from Products", null);
-        while (c3.moveToNext()){
+        while (c3.moveToNext()) {
             ProductList.productList.stream().filter(product -> product.getId() == c3.getInt(0)).forEach(product -> product.setTimes_in_lists(c3.getInt(1)));
-        };
-            ProductList.productList.sort(Comparator.comparing(Product::getTimes_in_lists).reversed());
+        }
+        ProductList.productList.sort(Comparator.comparing(Product::getTimes_in_lists).reversed());
         try {
             ProductList.myAdapter.notifyDataSetChanged();
         } catch (Exception e) {
@@ -120,8 +124,6 @@ public class DB {
             return listid;
         } else return "0";
     }
-
-
     //MÉTODO PARA CARGAR LOS DATOS DE LA BASE DE DATOS
     public static void getDBData() {
         if (DBChanged()) {
@@ -136,19 +138,14 @@ public class DB {
             c.close();
         }
     }
-
     //MÉTODO QUE COMPRUEBA SI LOS DATOS DE LA LISTA DE PRODUCTOS Y LOS DE LA BASE DE DATOS SON IGUALES
     private static boolean DBChanged() {
         Cursor c = DB.getDB.rawQuery("select product_id from Products", null);
         if (c.getCount() != ProductList.productList.size()) {
             Log.d(LOG_ID + "144", "Han cambiado los datos");
+            c.close();
             return true;
-        } else {
-            Log.d(LOG_ID + "147", "No hay cambio en los datos");
-            return false;
         }
-
+        return false;
     }
-
-
 }
