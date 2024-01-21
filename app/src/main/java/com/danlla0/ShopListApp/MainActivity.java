@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //MÉTODO PARA CARGAR LAS ALARMAS QUE TIENE ESTABLECIDAS LA APLICACIÓN
+    //MÉTODO PARA CARGAR LAS ALARMAS QUE TIENE ESTABLECIDAS LA APLICACIÓN EN LAS PREFERENCIAS
     public void loadAlarms() {
         SharedPreferences myPreferences = getSharedPreferences("alarms-preferences", MODE_PRIVATE);
         HashMap<String, String> alarms = (HashMap<String, String>) myPreferences.getAll();
