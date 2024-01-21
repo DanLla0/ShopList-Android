@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //MÉTODO QUE LANZA UN HILO ASÍNCRONO QUE CARGA LOS CONTACTOS EN EL ARRAY DE LA LÓGICA
-    private void getContacts() {
+    private void getContacts(String filter) {
         ContactList.contactList.clear();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
@@ -259,8 +259,9 @@ public class MainActivity extends AppCompatActivity {
                         ContactsContract.Contacts.DISPLAY_NAME,
                         ContactsContract.Contacts.HAS_PHONE_NUMBER};
                 String selection = ContactsContract.Contacts.DISPLAY_NAME + " like ?";
+                String[] selectionArgs = {"%"+filter+"%"};
                 ContentResolver contentResolver = getContentResolver();
-                Cursor contactCursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, projection, selection, null, null);
+                Cursor contactCursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, projection, selection, selectionArgs, null);
                 if (contactCursor.getCount() > 0) {
                     while (contactCursor.moveToNext()) {
                         String phoneNumber = "-----------";
@@ -301,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         if (checkSelfPermission("android.permission.READ_CONTACTS") != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{"android.permission.READ_CONTACTS"}, CONTACT_PERMISSION);
         } else {
-            getContacts();
+            getContacts("");
         }
     }
 
@@ -311,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CONTACT_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getContacts();
+                getContacts("");
             }
         }
     }
