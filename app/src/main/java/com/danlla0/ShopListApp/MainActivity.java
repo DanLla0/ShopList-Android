@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
     // MÉTODO PARA CREAR LA BASE DE DATOS Y CARGAR LOS DATOS
     public void createBD() {
-        DB.getDB.execSQL("DROP TABLE IF EXISTS Products");
+     DB.getDB.execSQL("DROP TABLE IF EXISTS Products");
         DB.getDB.execSQL("DROP TABLE IF EXISTS Lists");
         DB.getDB.execSQL("DROP TABLE IF EXISTS ListDetails");
 
